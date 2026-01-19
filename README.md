@@ -43,10 +43,12 @@ npm install
 
 1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com) → AI → AI Gateway
 2. Click **Create Gateway**
-3. Name it **exactly** `opencode-for-events`
-4. Set **Rate Limiting** as needed (optional)
+3. Name it **exactly** `opencode-for-events` (or update the `GATEWAY_ID` in wrangler.jsonc)
+4. Set **Authenticated Gateway** as needed (optional but recommended)
 5. Click **Create**
-6. Note down your **Account ID** and **Gateway ID** from the dashboard
+6. Note down your **Cloudflare Account ID** and **AI Gateway ID/Name** from the dashboard
+
+![AI Gateway](./assets/ai-gateway.png)
 
 ### 3. Create KV Namespaces
 
@@ -64,6 +66,8 @@ wrangler kv namespace create "O4E_CONFIG_CACHE"
 ```
 
 Each command will output a namespace ID. Save these for the next step.
+
+![KV](./assets/kv.png)
 
 ### 4. Configure wrangler.jsonc
 
@@ -90,15 +94,17 @@ Replace the placeholder IDs with your newly created namespace IDs:
 ]
 ```
 
+> On newer wrangler versions, this will be done automatically. You might need to remove duplicate entries.
+
 #### Gateway Configuration
 
 Update the `vars` section with your Cloudflare Account ID and Gateway details:
 
 ```jsonc
 "vars": {
-  "GATEWAY_ACCOUNT_ID": "YOUR_CLOUDFLARE_ACCOUNT_ID",  // From step 2
+  "GATEWAY_ACCOUNT_ID": "<YOUR_CLOUDFLARE_ACCOUNT_ID>",  // From step 2
   "GATEWAY_ID": "opencode-for-events",
-  "GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/YOUR_CLOUDFLARE_ACCOUNT_ID/opencode-for-events"
+  "GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/<YOUR_CLOUDFLARE_ACCOUNT_ID>/opencode-for-events"
 }
 ```
 
@@ -119,13 +125,13 @@ Otherwise, remove the `routes` section and use the default `*.workers.dev` domai
 
 ### 5. Set API Gateway Secret
 
-Store your AI Gateway API key as a secret:
+Create an API token for your AI Gateway (with Run permissions) and store your AI Gateway API key as a secret:
 
 ```bash
 wrangler secret put GATEWAY_API_KEY
 ```
 
-When prompted, paste your AI Gateway API key. You can find this in the Cloudflare Dashboard under AI → AI Gateway → your gateway → Settings → API Token.
+When prompted, paste your AI Gateway API key. You can find this in the Cloudflare Dashboard, or visit `https://dash.cloudflare.com/<YOUR_CLOUDFLARE_ACCOUNT_ID>/ai/ai-gateway/gateways/<YOUR_GATEWAY_ID>/settings/tokens`.
 
 ### 6. Create Cloudflare Access Applications
 

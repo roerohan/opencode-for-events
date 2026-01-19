@@ -17,15 +17,15 @@
 	"kv_namespaces": [
 		{
 			"binding": "O4E_TEAM_CONFIG",
-			"id": "3f3e23e6a06944cdb98fcb0e11a4c9db"
+			"id": "24599d52d439461bb72e11b9eeb0d707"
 		},
 		{
 			"binding": "O4E_TEAM_USAGE",
-			"id": "36a1c8b2f39e4c0385c4279e42e0a48a"
+			"id": "566a551df0144f33966f69692bf01ce7"
 		},
 		{
 			"binding": "O4E_CONFIG_CACHE",
-			"id": "ba8294bc269b447bbbaccdd98ff010a9"
+			"id": "4c6e6ff01ef8463197aa106806d6db55"
 		}
 	],
 	"triggers": {
@@ -44,34 +44,4 @@
 		"GATEWAY_ID": "opencode-for-events",
 		"GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/7e18d02bdef040f9887abcca24453371/opencode-for-events"
 	},
-	"env": {
-		"staging": {
-			"name": "opencode-for-events-staging",
-			"kv_namespaces": [
-				{
-					"binding": "O4E_CONFIG_CACHE",
-					"id": "ba8294bc269b447bbbaccdd98ff010a9"
-				},
-				{
-					"binding": "O4E_TEAM_CONFIG",
-					"id": "3f3e23e6a06944cdb98fcb0e11a4c9db"
-				},
-				{
-					"binding": "O4E_TEAM_USAGE",
-					"id": "36a1c8b2f39e4c0385c4279e42e0a48a"
-				}
-			],
-			"routes": [
-				{
-					"pattern": "staging.opencode-for-events.roerohan.com",
-					"custom_domain": true
-				}
-			],
-			"vars": {
-				"GATEWAY_ACCOUNT_ID": "7e18d02bdef040f9887abcca24453371",
-				"GATEWAY_ID": "opencode-for-events",
-				"GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/7e18d02bdef040f9887abcca24453371/opencode-for-events"
-			}
-		}
-	}
 }
