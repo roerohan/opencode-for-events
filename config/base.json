@@ -1,0 +1,59 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"disabled_providers": ["opencode"],
+	"enabled_providers": ["anthropic", "openai"],
+	"provider": {
+		"anthropic": {
+			"name": "Anthropic via AI Gateway",
+			"options": {
+				"baseURL": "{baseURL}/anthropic",
+				"apiKey": "",
+				"headers": {
+					"cf-access-token": "{env:{ENV_NAME}}",
+					"X-Requested-With": "xmlhttprequest"
+				}
+			}
+		},
+		"openai": {
+			"name": "OpenAI via AI Gateway",
+			"options": {
+				"baseURL": "{baseURL}/openai",
+				"apiKey": "",
+				"headers": {
+					"cf-access-token": "{env:{ENV_NAME}}",
+					"X-Requested-With": "xmlhttprequest"
+				}
+			},
+			"models": {
+				"gpt-5.2": {
+					"options": {
+						"store": false,
+						"include": ["reasoning.encrypted_content"]
+					},
+					"variants": {
+						"none": {
+							"store": false,
+							"include": ["reasoning.encrypted_content"]
+						},
+						"low": {
+							"store": false,
+							"include": ["reasoning.encrypted_content"]
+						},
+						"medium": {
+							"store": false,
+							"include": ["reasoning.encrypted_content"]
+						},
+						"high": {
+							"store": false,
+							"include": ["reasoning.encrypted_content"]
+						},
+						"xhigh": {
+							"store": false,
+							"include": ["reasoning.encrypted_content"]
+						}
+					}
+				}
+			}
+		}
+	}
+}

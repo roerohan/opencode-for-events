@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opencode Authentication</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: #f6821f;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .steps {
+            list-style: none;
+            counter-reset: step;
+            margin: 2rem 0;
+        }
+
+        .steps li {
+            position: relative;
+            padding: 1.5rem 1.5rem 1.5rem 3.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .steps li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #f6821f;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .steps li li::before {
+            content: none;
+            counter-increment: none;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            margin: 0.5rem 0;
+            word-break: break-all;
+        }
+
+        a {
+            color: #f6821f;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        a:hover {
+            color: #d86b13;
+        }
+
+        .faq-note {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .beta-callout {
+            background: #fff8e6;
+            border-left: 4px solid #f6821f;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            color: #8a6d3b;
+        }
+
+        .beta-callout strong {
+            color: #f6821f;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to OpenCode for Events</h1>
+        <p class="subtitle">Get started with OpenCode for your event. Each team has a credit allocation to use during the event.</p>
+
+        <div class="beta-callout">
+            <strong>Event Access:</strong> Your team has been allocated a specific credit limit. Once exhausted, access will be automatically restricted.
+        </div>
+
+        <ul class="steps">
+            <li>
+                <strong>Install Opencode</strong><br>
+                Follow our installation guide
+                <a href="https://opencode.ai/docs/#install" target="_blank">here</a>.
+                <div class="note">If you've installed OpenCode previously, make sure you are on a recent version via <code>opencode upgrade</code> or via your package manager.</div>
+            </li>
+            <li>
+                <strong>Authenticate via Terminal</strong><br>
+                Run this command in your terminal:
+                <div class="code-block">opencode auth login https://opencode-for-events.examples.workers.dev</div>
+            </li>
+            <li>
+                <strong>Start Using Opencode</strong><br>
+                Once authenticated, you're ready to use all Opencode features!
+            </li>
+            <li>
+                <strong>Check Your Team's Credit Status</strong><br>
+                Your event organizers can check your team's remaining credits. Use OpenCode responsibly to make the most of your allocation throughout the event.
+            </li>
+        </ul>
+
+        <div class="faq-section" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #1a1a1a;">FAQ</h2>
+            
+            <details style="margin-bottom: 0.75rem;">
+                <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem 0;">How do credit limits work?</summary>
+                <p style="padding: 0.5rem 0 0.5rem 1rem; color: #666;">Each team is allocated a fixed credit limit (e.g., $20) for the duration of the event. All team members share this pool. Once your team exhausts the credits, access will be automatically restricted.</p>
+            </details>
+
+            <details style="margin-bottom: 0.75rem;">
+                <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem 0;">How do I check my authentication status?</summary>
+                <p style="padding: 0.5rem 0 0.5rem 1rem; color: #666;">Run <code>opencode auth status</code> in your terminal. If expired, re-run <code>opencode auth login https://opencode-for-events.examples.workers.dev</code>.</p>
+            </details>
+
+            <details style="margin-bottom: 0.75rem;">
+                <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem 0;">What if my team runs out of credits?</summary>
+                <p style="padding: 0.5rem 0 0.5rem 1rem; color: #666;">Contact your event organizers if you need additional credits. Access will be blocked when the team limit is reached to ensure fair distribution across all participants.</p>
+            </details>
+
+            <details style="margin-bottom: 0.75rem;">
+                <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem 0;">Where can I learn more about OpenCode?</summary>
+                <p style="padding: 0.5rem 0 0.5rem 1rem; color: #666;">Check out the official <a href="https://opencode.ai/docs/" target="_blank">OpenCode documentation</a> for guides, configuration options, and advanced features.</p>
+            </details>
+        </div>
+    </div>
+</body>
+
+</html>

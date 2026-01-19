@@ -1,0 +1,27 @@
+[
+	{
+		"teamId": "team-alpha",
+		"emails": [
+			"alice@example.com",
+			"bob@example.com"
+		],
+		"creditLimit": 20.00
+	},
+	{
+		"teamId": "team-beta",
+		"emails": [
+			"charlie@example.com",
+			"dana@example.com",
+			"eve@example.com"
+		],
+		"creditLimit": 20.00
+	},
+	{
+		"teamId": "team-gamma",
+		"emails": [
+			"frank@example.com",
+			"me@roerohan.com"
+		],
+		"creditLimit": 10.00
+	}
+]
