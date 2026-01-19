@@ -168,10 +168,11 @@ const JIRA_INCLUDED_FIELDS = [...]
 ## Environment Variables
 
 Worker bindings (defined in wrangler.jsonc):
-- `GATEWAY_API_KEY` - AI Gateway authorization key
+- `GATEWAY_API_KEY` - AI Gateway authorization key (secret)
 - `GATEWAY_URL` - AI Gateway base URL
 - `GATEWAY_ACCOUNT_ID` - Cloudflare account ID
 - `GATEWAY_ID` - Gateway identifier
+- `CF_ACCESS_TEAM_NAME` - Cloudflare Access team name (from Zero Trust dashboard)
 - `ASSETS` - Static assets binding
 - `O4E_TEAM_USAGE` - KV namespace for tracking team credit usage
 - `O4E_TEAM_CONFIG` - KV namespace for team configuration (email mappings, credit limits)
@@ -259,12 +260,14 @@ Special handling for `gpt-5.2`:
 ### Authentication Flow
 
 1. User makes request with `cf-access-token` header (from Cloudflare Access login)
-2. Worker fetches JWKS public keys from `https://cfcommunity.cloudflareaccess.com/cdn-cgi/access/certs`
+2. Worker fetches JWKS public keys from `https://{CF_ACCESS_TEAM_NAME}.cloudflareaccess.com/cdn-cgi/access/certs`
 3. JWKS keys are cached in-memory for 1 hour
 4. JWT token is cryptographically verified using `Jwt.verifyWithJwks`
 5. Email is extracted from JWT payload
 6. Worker looks up team by iterating through all team configs in KV to find matching email
 7. If no team found, return 403 Forbidden
+
+Note: `CF_ACCESS_TEAM_NAME` is configured in `wrangler.jsonc` and should match your Cloudflare Access team name from the Zero Trust dashboard.
 
 ### Retry Logic
 

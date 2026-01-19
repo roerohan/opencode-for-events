@@ -104,9 +104,16 @@ Update the `vars` section with your Cloudflare Account ID and Gateway details:
 "vars": {
   "GATEWAY_ACCOUNT_ID": "<YOUR_CLOUDFLARE_ACCOUNT_ID>",  // From step 2
   "GATEWAY_ID": "opencode-for-events",
-  "GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/<YOUR_CLOUDFLARE_ACCOUNT_ID>/opencode-for-events"
+  "GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/<YOUR_CLOUDFLARE_ACCOUNT_ID>/opencode-for-events",
+  "CF_ACCESS_TEAM_NAME": "<YOUR_CLOUDFLARE_ACCESS_TEAM_NAME>"  // From Zero Trust dashboard
 }
 ```
+
+To find your Cloudflare Access team name:
+1. Go to your [Cloudflare Zero Trust dashboard](https://one.dash.cloudflare.com/?to=/:account/settings)
+2. Navigate to **Settings** → **Custom Pages**
+3. Your team name is shown in the URL format: `https://<TEAM_NAME>.cloudflareaccess.com`
+4. Use this team name (e.g., `cfcommunity`, `mycompany`, etc.) for the `CF_ACCESS_TEAM_NAME` variable
 
 #### Custom Domain (Optional)
 
@@ -272,6 +279,7 @@ Set in `wrangler.jsonc` under `vars`:
 - `GATEWAY_ACCOUNT_ID` - Your Cloudflare account ID
 - `GATEWAY_ID` - AI Gateway identifier (must be `opencode-for-events`)
 - `GATEWAY_URL` - Full AI Gateway URL
+- `CF_ACCESS_TEAM_NAME` - Your Cloudflare Access team name (find at https://one.dash.cloudflare.com/?to=/:account/settings)
 
 Set as secrets (via `wrangler secret put`):
 - `GATEWAY_API_KEY` - AI Gateway API token

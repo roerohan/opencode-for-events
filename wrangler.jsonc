@@ -42,6 +42,7 @@
 	"vars": {
 		"GATEWAY_ACCOUNT_ID": "7e18d02bdef040f9887abcca24453371",
 		"GATEWAY_ID": "opencode-for-events",
-		"GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/7e18d02bdef040f9887abcca24453371/opencode-for-events"
+		"GATEWAY_URL": "https://gateway.ai.cloudflare.com/v1/7e18d02bdef040f9887abcca24453371/opencode-for-events",
+		"CF_ACCESS_TEAM_NAME": "roerohan"
 	},
 }

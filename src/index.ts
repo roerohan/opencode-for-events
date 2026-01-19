@@ -8,6 +8,7 @@ interface Env {
   GATEWAY_URL: string;
   GATEWAY_ACCOUNT_ID: string;
   GATEWAY_ID: string;
+  CF_ACCESS_TEAM_NAME: string;
   O4E_CONFIG_CACHE: KVNamespace;
   O4E_TEAM_CONFIG: KVNamespace;
   O4E_TEAM_USAGE: KVNamespace;
@@ -77,8 +78,6 @@ interface ErrorResponse {
 }
 
 const app = new Hono<{ Bindings: Env }>();
-const CF_ACCESS_TEAM_NAME = "cfcommunity";
-const CF_ACCESS_CERTS_URI = `https://${CF_ACCESS_TEAM_NAME}.cloudflareaccess.com/cdn-cgi/access/certs`;
 
 let cachedKeys: HonoJsonWebKey[] | null = null;
 let cacheExpiration = 0;
@@ -107,14 +106,16 @@ async function withRetry<T>(
   throw lastError!;
 }
 
-async function getPublicKeys(): Promise<HonoJsonWebKey[]> {
+async function getPublicKeys(cfAccessTeamName: string): Promise<HonoJsonWebKey[]> {
   const now = Date.now();
   if (cachedKeys && now < cacheExpiration) {
     return cachedKeys;
   }
 
+  const cfAccessCertsUri = `https://${cfAccessTeamName}.cloudflareaccess.com/cdn-cgi/access/certs`;
+
   const keys = await withRetry(async () => {
-    const response = await fetch(CF_ACCESS_CERTS_URI);
+    const response = await fetch(cfAccessCertsUri);
     if (!response.ok) {
       throw new Error(`Failed to fetch JWKS: ${response.status}`);
     }
@@ -325,7 +326,10 @@ app.post("*", async (c) => {
   // Verify JWT with JWKS (cryptographic verification)
   let payload: { email?: string };
   try {
-    const keys = await getPublicKeys();
+    if (!c.env.CF_ACCESS_TEAM_NAME) {
+      return createErrorResponse("CF_ACCESS_TEAM_NAME not configured", 500, "Configuration Error");
+    }
+    const keys = await getPublicKeys(c.env.CF_ACCESS_TEAM_NAME);
     payload = await Jwt.verifyWithJwks(token, { keys }) as { email?: string };
   } catch (e) {
     console.error("JWT verification failed:", e instanceof Error ? e.message : "Unknown error");
