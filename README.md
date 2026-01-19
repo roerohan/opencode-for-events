@@ -123,6 +123,8 @@ If using a custom domain, update the routes section:
 
 Otherwise, remove the `routes` section and use the default `*.workers.dev` domain.
 
+**Note**: If you're using a different domain than `opencode-for-events.roerohan.com`, you'll need to find and replace all occurrences of `opencode-for-events.roerohan.com` in `wrangler.jsonc` with your actual domain.
+
 ### 5. Set API Gateway Secret
 
 Create an API token for your AI Gateway (with Run permissions) and store your AI Gateway API key as a secret:
@@ -144,7 +146,7 @@ You need to create **two** Cloudflare Access applications to secure your worker:
 3. Configure the application:
    - **Application name**: `opencode-for-events - Authenticated`
    - **Session Duration**: Choose based on your event length
-   - **Application domain**: Your worker domain (e.g., `opencode-for-events.example.com`)
+   - **Application domain**: Your worker domain (e.g., `opencode-for-events.roerohan.com`)
 4. Go to **Policies** tab and add:
    - **Policy name**: `Allow Everyone`
    - **Action**: ALLOW
@@ -159,7 +161,7 @@ You need to create **two** Cloudflare Access applications to secure your worker:
 2. Choose **Self-hosted**
 3. Configure the application:
    - **Application name**: `opencode-for-events - Unauthenticated`
-   - **Application domain**: Your worker domain with path `/.well-known/*` (e.g., `opencode-for-events.example.com/.well-known/*`)
+   - **Application domain**: Your worker domain with path `/.well-known/*` (e.g., `opencode-for-events.roerohan.com/.well-known/*`)
 4. Go to **Policies** tab and add:
    - **Policy name**: `Bypass - Everyone`
    - **Action**: BYPASS
@@ -211,7 +213,7 @@ npm run setup-teams -- teams.json
 npm run deploy
 ```
 
-Your worker will be live at `https://<your-worker-name>.workers.dev` or your custom domain.
+Your worker will be live at `https://opencode-for-events.roerohan.com` (or your custom domain/workers.dev subdomain).
 
 ## Usage
 
