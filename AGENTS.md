@@ -4,17 +4,22 @@ Guidelines for AI agents working in this repository.
 
 ## Project Overview
 
-Cloudflare Worker that distributes OpenCode access to event participants with team-based credit limits:
-- Validates JWT tokens via JWKS
-- Maps user emails to teams and enforces per-team credit limits
-- Tracks AI usage costs per team in Cloudflare KV
-- Blocks requests when team exceeds allocated credit limit
-- Proxies authenticated requests to AI Gateway with usage tracking
-- Serves OpenCode configuration at `/.well-known/opencode`
+Cloudflare Worker that provides secure, budget-controlled OpenCode access for event participants through Cloudflare Access authentication and team-based credit limits.
 
-**Use Case:** Event hackathons where participants are organized into teams, each with a fixed credit allocation (e.g., $20). Once a team exhausts their credits, access is automatically denied.
+**What it does:**
+- Authenticates users via Cloudflare Access (JWT with JWKS verification)
+- Maps authenticated user emails to teams from KV storage
+- Enforces per-team credit limits with real-time usage tracking
+- Proxies requests to Cloudflare AI Gateway (Anthropic & OpenAI providers)
+- Tracks costs via `cf-aig-cost-usd` header and updates team usage in KV
+- Blocks access with 429 when team exceeds credit limit
+- Serves dynamic OpenCode configuration at `/.well-known/opencode`
+- Caches OpenAI models list from models.dev (refreshed hourly via cron)
+- Applies `store: false` to all OpenAI models for ZDR compatibility
 
-**Tech Stack:** Cloudflare Workers, Hono, TypeScript, Wrangler, KV Storage
+**Use Case:** Hackathons, workshops, and coding events where participants are organized into teams with fixed credit allocations (e.g., $20 per team). Access is automatically denied when credits are exhausted.
+
+**Tech Stack:** Cloudflare Workers, Hono, TypeScript, Wrangler, KV Storage, Cloudflare Access, AI Gateway
 
 ## Commands
 
@@ -230,11 +235,45 @@ Flow:
 
 ### Request Proxying
 
-- Strip incoming `Authorization` header
+- Strip incoming `Authorization` and `x-api-key` headers
 - Add `cf-aig-authorization` with GATEWAY_API_KEY
 - Add `cf-aig-metadata` with user context (email, teamId)
-- Return streaming response for SSE
-- Track usage cost from response headers/metadata
+- Return streaming response (pass through from AI Gateway)
+- Extract usage cost from `cf-aig-cost-usd` response header (defaults to $0.001 if not present)
+- Update team usage in KV after each request
+
+### OpenAI Models Management
+
+The worker dynamically manages OpenAI model configurations:
+
+1. **Scheduled cron job** (hourly): Fetches latest OpenAI models from models.dev API
+2. **Caching**: Stores model list in `O4E_CONFIG_CACHE` KV with 24-hour expiration
+3. **Filtering**: Excludes embedding models (e.g., `text-embedding-*`)
+4. **ZDR Compliance**: Applies `store: false` to all OpenAI models in the config
+5. **Fallback**: Uses hardcoded model list if fetch fails or KV is empty
+
+Special handling for `gpt-5.2`:
+- Includes `reasoning.encrypted_content` in response
+- Supports variants: none, low, medium, high, xhigh
+
+### Authentication Flow
+
+1. User makes request with `cf-access-token` header (from Cloudflare Access login)
+2. Worker fetches JWKS public keys from `https://cfcommunity.cloudflareaccess.com/cdn-cgi/access/certs`
+3. JWKS keys are cached in-memory for 1 hour
+4. JWT token is cryptographically verified using `Jwt.verifyWithJwks`
+5. Email is extracted from JWT payload
+6. Worker looks up team by iterating through all team configs in KV to find matching email
+7. If no team found, return 403 Forbidden
+
+### Retry Logic
+
+Critical operations use exponential backoff retry:
+```typescript
+withRetry(fn, delays = [5000, 10000]) // 3 attempts total
+```
+Applied to:
+- JWKS public key fetching
 
 ## Development Guidelines
 
