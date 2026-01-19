@@ -146,7 +146,7 @@ You need to create **two** Cloudflare Access applications to secure your worker:
    - **Session Duration**: Choose based on your event length
    - **Application domain**: Your worker domain (e.g., `opencode-for-events.example.com`)
 4. Go to **Policies** tab and add:
-   - **Policy name**: `Allows Everyone`
+   - **Policy name**: `Allow Everyone`
    - **Action**: ALLOW
    - **Include**: Everyone
 5. **Save application**
