@@ -123,7 +123,7 @@ If using a custom domain, update the routes section:
 
 Otherwise, remove the `routes` section and use the default `*.workers.dev` domain.
 
-**Note**: If you're using a different domain than `opencode-for-events.roerohan.com`, you'll need to find and replace all occurrences of `opencode-for-events.roerohan.com` in `wrangler.jsonc` with your actual domain.
+Note, you will also need to add the custom domain to [public/index.html](./public/index.html).
 
 ### 5. Set API Gateway Secret
 
@@ -213,7 +213,7 @@ npm run setup-teams -- teams.json
 npm run deploy
 ```
 
-Your worker will be live at `https://opencode-for-events.roerohan.com` (or your custom domain/workers.dev subdomain).
+Your worker will be live at your custom domain/workers.dev subdomain.
 
 ## Usage
 
