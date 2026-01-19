@@ -131,7 +131,7 @@ Create an API token for your AI Gateway (with Run permissions) and store your AI
 wrangler secret put GATEWAY_API_KEY
 ```
 
-When prompted, paste your AI Gateway API key. You can find this in the Cloudflare Dashboard, or visit `https://dash.cloudflare.com/<YOUR_CLOUDFLARE_ACCOUNT_ID>/ai/ai-gateway/gateways/<YOUR_GATEWAY_ID>/settings/tokens`.
+When prompted, paste your AI Gateway API key. You can find this in the Cloudflare Dashboard, or visit `https://dash.cloudflare.com/<YOUR_CLOUDFLARE_ACCOUNT_ID>/ai/ai-gateway/gateways/opencode-for-events/settings/tokens`.
 
 ### 6. Create Cloudflare Access Applications
 
@@ -142,31 +142,31 @@ You need to create **two** Cloudflare Access applications to secure your worker:
 1. Go to **Zero Trust** → **Access** → **Applications** → **Add an application**
 2. Choose **Self-hosted**
 3. Configure the application:
-   - **Application name**: `opencode-for-events - Cloudflare Workers`
+   - **Application name**: `opencode-for-events - Authenticated`
    - **Session Duration**: Choose based on your event length
-   - **Application domain**: Your worker domain (e.g., `opencode-for-events.example.workers.dev`)
+   - **Application domain**: Your worker domain (e.g., `opencode-for-events.example.com`)
 4. Go to **Policies** tab and add:
-   - **Policy name**: `opencode-for-events - Production`
-   - **Action**: ALLOW
-   - **Include**: Add your authentication method (Email, Google Workspace, etc.)
-   - **Then add a second policy**:
    - **Policy name**: `Allows Everyone`
    - **Action**: ALLOW
    - **Include**: Everyone
 5. **Save application**
+
+![Opencode Authenticated](./assets/opencode-authenticated.png)
 
 #### Application 2: Public Endpoint (bypass for /.well-known/opencode)
 
 1. Go to **Zero Trust** → **Access** → **Applications** → **Add an application**
 2. Choose **Self-hosted**
 3. Configure the application:
-   - **Application name**: `Opencode for events - public`
-   - **Application domain**: Your worker domain with path `/.well-known/*` (e.g., `opencode-for-events.example.workers.dev/.well-known/*`)
+   - **Application name**: `opencode-for-events - Unauthenticated`
+   - **Application domain**: Your worker domain with path `/.well-known/*` (e.g., `opencode-for-events.example.com/.well-known/*`)
 4. Go to **Policies** tab and add:
    - **Policy name**: `Bypass - Everyone`
    - **Action**: BYPASS
    - **Include**: Everyone
 5. **Save application**
+
+![Opencode Unauthenticated](./assets/opencode-unauthenticated.png)
 
 **Important**: Make sure the public endpoint application (with BYPASS) is ordered **before** the main application in the Access policies list. Access evaluates policies in top-to-bottom order.
 
@@ -195,7 +195,7 @@ Create a `teams.json` file with your team configuration:
 ]
 ```
 
-- `teamId`: Unique identifier for each team
+- `teamId`: **Unique** identifier for each team
 - `emails`: List of participant email addresses (must match their login emails)
 - `creditLimit`: Maximum spending in USD
 
@@ -211,15 +211,15 @@ npm run setup-teams -- teams.json
 npm run deploy
 ```
 
-Your worker will be live at `https://your-worker-name.workers.dev` or your custom domain.
+Your worker will be live at `https://<your-worker-name>.workers.dev` or your custom domain.
 
 ## Usage
 
 ### For Participants
 
-1. Install [OpenCode CLI](https://opencode.ai/docs/installation)
-2. Run: `opencode init --url https://your-worker-domain.com`
-3. Authenticate via Cloudflare Access (opens browser)
+1. Install [OpenCode CLI](https://opencode.ai/docs/installation) and [cloudflared](https://github.com/cloudflare/cloudflared?tab=readme-ov-file#installing-cloudflared)
+2. Run: `opencode auth login https://<your-worker-domain>.com`
+3. Use `cloudflared` to authenticate via Cloudflare Access (opens browser)
 4. Start coding with OpenCode!
 
 ### For Organizers
