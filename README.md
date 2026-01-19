@@ -191,7 +191,7 @@ Create a `teams.json` file with your team configuration:
       "alice@example.com",
       "bob@example.com"
     ],
-    "creditLimit": 20.00
+    "creditLimit": 75.00
   },
   {
     "teamId": "team-beta",
@@ -199,7 +199,7 @@ Create a `teams.json` file with your team configuration:
       "charlie@example.com",
       "dana@example.com"
     ],
-    "creditLimit": 15.00
+    "creditLimit": 50.00
   }
 ]
 ```
@@ -287,9 +287,9 @@ Set as secrets (via `wrangler secret put`):
 ### Credit Limit Guidelines
 
 Recommended starting values based on event type:
-- **24-hour Hackathon**: $20-50 per team
-- **4-hour Workshop**: $5-10 per team  
-- **3-day Conference**: $50-100 per team
+- **24-hour Hackathon**: $50-100 per team
+- **4-hour Workshop**: $15-30 per team  
+- **3-day Conference**: $150-300 per team
 
 Adjust based on:
 - Event duration
@@ -329,7 +329,7 @@ Missing or invalid authentication token.
 ```json
 {
   "error": "Quota Exceeded",
-  "message": "Team team-alpha has exceeded credit limit ($20). Current usage: $20.45",
+  "message": "Team team-alpha has exceeded credit limit ($75). Current usage: $75.45",
   "status": 429,
   "timestamp": "2026-01-19T10:30:00.000Z"
 }
